@@ -1,0 +1,5 @@
+# ninja log v5
+7	181	7668040540414239	CMakeFiles/TigerGame.dir/Tiger.cpp.obj	237b14a1777a26c3
+1	182	7668040540404234	CMakeFiles/TigerGame.dir/Soldiers.cpp.obj	bfbb71ec70e557d0
+4	263	7668040541389872	CMakeFiles/TigerGame.dir/main.cpp.obj	1b6ce4cae72ee663
+264	385	7668040542569953	TigerGame.exe	e81439e2544ef84e
