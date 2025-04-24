@@ -4,7 +4,6 @@
 
 #include "Tiger.h"
 #include <vector>
-#include "global.h"
 using namespace std;
 
 class Tiger {

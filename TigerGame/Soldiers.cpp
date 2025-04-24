@@ -4,7 +4,6 @@
 
 #include "Soldiers.h"
 #include <vector>
-#include "global.h"
 using namespace std;
 
 

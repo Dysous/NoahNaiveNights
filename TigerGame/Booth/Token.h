@@ -13,8 +13,6 @@ using namespace std;
 
 #include "Color.h"
 #include "Point.h"
-#include "BearGame.h"
-#include "SDL_Plotter.h"
 #include "constants.h"
 
 
@@ -74,46 +72,6 @@ class Token{
 		   return color;
 	   }
 
-	   void draw(SDL_Plotter& g){
-			   for(int x = -size; x < size; x++){
-				   for(int y = -size; y < size; y++){
-					   if(sqrt(X_OFFSET+x*x + Y_OFFSET+y*y) < size){
-						   g.plotPixel(Y_OFFSET + location.y*SQUARE_WIDTH + y,X_OFFSET + location.x*SQUARE_WIDTH + x,  color.R, color.G, color.B);
-					   }
-				   }
-			   }
-	   }
-
-	   void drawHere(SDL_Plotter& g){
-		   if(active){
-			   for(int x = -size; x < size; x++){
-				   for(int y = -size; y < size; y++){
-					   if(sqrt(X_OFFSET+x*x + Y_OFFSET+y*y) < size){
-						   g.plotPixel( location.y + y,location.x + x,  color.R, color.G, color.B);
-					   }
-				   }
-			   }
-		   }
-	   }
-
-	   void eraseHere(SDL_Plotter& g){
-		   if(active){
-			   for(int x = -size; x < size; x++){
-				   for(int y = -size; y < size; y++){
-					   if(sqrt(X_OFFSET+x*x + Y_OFFSET+y*y) < size){
-						   g.plotPixel(location.x + x,  + location.y + y, 255, 255, 255);
-					   }
-				   }
-			   }
-		   }
-	   }
-
-	   void erase(SDL_Plotter& g){
-		   Color c = color;
-		   setColor(BACKGROUND);
-		   draw(g);
-		   setColor(c);
-	   }
 
 	   void setAttached(bool flag){
 		   attached = flag;

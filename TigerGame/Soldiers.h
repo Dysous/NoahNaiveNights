@@ -6,8 +6,8 @@
 #define TIGERGAME_SOLDIERS_H
 
 #include <random>
-#include "BearGame.h"
-#include "constants.h"
+
+#include "Booth/constants.h"
 
 using namespace std;
 

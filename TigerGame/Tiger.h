@@ -4,5 +4,6 @@
 
 #ifndef TIGERGAME_TIGER_H
 #define TIGERGAME_TIGER_H
+#include "Booth/Token.h"
 
 #endif //TIGERGAME_TIGER_H

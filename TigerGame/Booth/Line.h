@@ -11,7 +11,6 @@
 #include <cmath>
 using namespace std;
 
-#include "SDL_Plotter.h"
 #include "Point.h"
 #include "Color.h"
 
@@ -64,28 +63,6 @@ class Line{
 	    	   return hasIntercept;
 	    }
 
-	    void draw(SDL_Plotter& g){
-	    	    double m, b;
-	    	    int y;
-
-	    	    if(slope(m)){
-	    		    y_intercept(b);
-	    		    for(int w = -width/2; w <= width/2; w++){
-	    	    	        for(int x = min(p1.x, p2.x); x <= max(p1.x, p2.x); x++){
-	    			        y = m * x + b + w;
-	    			        g.plotPixel(x, y, color.R, color.G, color.B);
-	    		        }
-	    		    }
-	    	    }
-	    	    else{
-	    		    for(int w = -width/2; w <= width/2; w++){
-	    	    	        for(int y = min(p1.y, p2.y); y <= max(p1.y, p2.y); y++){
-	    			        g.plotPixel(p1.x+w, y, color.R, color.G, color.B);
-	    		        }
-	    		    }
-
-	    	    }
-	    	 }
 };
 
 

@@ -3,7 +3,9 @@ project(TigerGame)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(TigerGame main.cpp
+add_executable(TigerGame
         Tiger.h
         Soldiers.cpp
-        Tiger.cpp)
+        Tiger.cpp
+        Booth/Line.h
+)
