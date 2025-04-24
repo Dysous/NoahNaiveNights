@@ -12,7 +12,7 @@
 using namespace std;
 
 // game phases for soldiers
-enum Phase {START, MID, END};
+enum Phase {START, MID, END, SURVIVE};
 
 //check if location is on grid
 //uses validLocationGrid from Booth's BearGame.h
@@ -98,16 +98,20 @@ Move_t  Move_NoahsNaiveNights_Men(vector<Token_t> game, Color_t turn) {
         // want to try to move pieces to center while sticking together
         case START:
 
-        break;
+            break;
 
         // control center and force tiger to corners
         case MID:
 
-        break;
+            break;
 
         case END:
 
-        break;
+            break;
+
+        case SURVIVE:
+
+            break;
     }
 
     return randomMove_soldiers(game);
