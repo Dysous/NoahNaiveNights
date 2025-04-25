@@ -1,9 +1,8 @@
-//
-// Created by NTMat on 4/19/2025.
-//
-
 #ifndef TIGERGAME_SOLDIERS_H
 #define TIGERGAME_SOLDIERS_H
+
+
+
 
 #include <random>
 #include <vector>
@@ -80,8 +79,8 @@ bool legalMove(vector<Token_t> game, Move_t move) {
     Point_t dest = move.destination;
 
 
-    int destRow = dst.row - source.row;
-    int destCol = dst.col - source.col;
+    int destRow = dest.row - source.row;
+    int destCol = dest.col - source.col;
 
     //check orthogonal first
     bool ok = (abs(destRow) + abs(destCol) == 1);
@@ -89,8 +88,8 @@ bool legalMove(vector<Token_t> game, Move_t move) {
     // check if diagnoal (added reverse too)
     if (!ok && abs(destRow) == 1 && abs(destCol) == 1) {
         // check either orientation in your diag list
-        auto forward  = make_pair(source, dst);
-        auto backward = make_pair(dst, source);
+        auto forward  = make_pair(source, dest);
+        auto backward = make_pair(dest, source);
         ok = (find(diags.begin(), diags.end(), forward ) != diags.end()) || (find(diags.begin(), diags.end(), backward) != diags.end());
     }
     if (!ok) return false;
@@ -216,8 +215,14 @@ int tigerMobilityScore(const vector<Token_t>& game) {
 
 Move_t bestMoveByTigerMobility(const vector<Token_t>& game) {
     auto moves = generateAllSoldierMoves(game);
+
+    //comparator:
+    auto cmp = [](const pair<int, Move_t>& a, const pair<int, Move_t>& b) {
+        return a.first > b.first;
+    };
+
     // min-heap by mobility count
-    priority_queue<pair<int,Move_t>, vector<pair<int,Move_t>>, greater<pair<int,Move_t>>> pq;
+    priority_queue<pair<int, Move_t>, vector<pair<int, Move_t>>, decltype(cmp)> pq(cmp);
 
     //sim moves and see which move is best by mobility
     for (auto &m : moves) {
@@ -230,7 +235,7 @@ Move_t bestMoveByTigerMobility(const vector<Token_t>& game) {
             }
         }
         int score = tigerMobilityScore(sim);
-        pq.push({score, m});
+        pq.emplace(score, m);
     }
     return pq.top().second;
 }
@@ -265,8 +270,9 @@ Move_t randomMove_soldiers(vector<Token_t> game) {
 
 // Soldiers function
 Move_t  Move_NoahsNaiveNights_Men(vector<Token_t> game, Color_t turn) {
-    if (turn !=  blue)
-        return randomMove_soldiers(game.size());
+
+    if (turn !=  BLUE)
+        return randomMove_soldiers(game);
 
     int tiger = 0;
     Phase p = getPhase(game);
@@ -276,24 +282,25 @@ Move_t  Move_NoahsNaiveNights_Men(vector<Token_t> game, Color_t turn) {
     switch (p) {
         // want to try to move pieces to center while sticking together
         case START:
-            return bestByTigerMobility(game);
+            return bestMoveByTigerMobility(game);
             break;
 
             // control center and force tiger to corners
         case MID:
-            return bestByTigerMobility(game);
+            return bestMoveByTigerMobility(game);
             break;
 
         case END:
-            return bestByTigerMobility(game);
+            return bestMoveByTigerMobility(game);
             break;
         case SURVIVE:
-            return bestByTigerMobility(game);
+            return bestMoveByTigerMobility(game);
             break;
 
     }
     return randomMove_soldiers(game);
 
 }
+
 
 #endif //TIGERGAME_SOLDIERS_H
