@@ -1,3 +1,0 @@
-C:/Users/NTMat/OneDrive/Documents/GitHub/NoahNaiveNights/TigerGame/cmake-build-debug/CMakeFiles/TigerGame.dir
-C:/Users/NTMat/OneDrive/Documents/GitHub/NoahNaiveNights/TigerGame/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/NTMat/OneDrive/Documents/GitHub/NoahNaiveNights/TigerGame/cmake-build-debug/CMakeFiles/rebuild_cache.dir

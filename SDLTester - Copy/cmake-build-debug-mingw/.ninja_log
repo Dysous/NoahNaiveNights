@@ -1,0 +1,4 @@
+# ninja log v5
+0	759	7297554623695197	CMakeFiles/SDLTester.dir/main.cpp.obj	7c5ce348c83e95b4
+4	930	7297554625386923	CMakeFiles/SDLTester.dir/SDL_Plotter.cpp.obj	fe8eee4a16b63041
+930	1366	7297554629690646	SDLTester.exe	b0114868e655051e

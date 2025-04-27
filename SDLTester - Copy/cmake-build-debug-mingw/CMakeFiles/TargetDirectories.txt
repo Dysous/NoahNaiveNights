@@ -1,0 +1,3 @@
+C:/Users/NTMat/CLionProjects/SDLTester/cmake-build-debug-mingw/CMakeFiles/SDLTester.dir
+C:/Users/NTMat/CLionProjects/SDLTester/cmake-build-debug-mingw/CMakeFiles/edit_cache.dir
+C:/Users/NTMat/CLionProjects/SDLTester/cmake-build-debug-mingw/CMakeFiles/rebuild_cache.dir

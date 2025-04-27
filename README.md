@@ -1,2 +1,0 @@
-# NoahNaiveNights
-Algorithms Group Project
