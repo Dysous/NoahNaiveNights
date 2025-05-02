@@ -204,6 +204,27 @@ int absSoldierDist(const vector<Token_t>& game) {
     return best;
 }
 
+bool isJumpable(const vector<Token_t>& game, int idx) {
+    // same logic as checkJump but only for soldier idx
+    return checkJump(game, idx).row >= 0;
+}
+
+int countJumpable(const vector<Token_t>& game) {
+    int cnt = 0;
+    for (int i = 1; i < (int)game.size(); ++i)
+        if (checkJump(game, i).row >= 0)
+            ++cnt;
+    return cnt;
+}
+
+//average row of all soldiers (lower is further up the board && better)
+double meanSoldierRow(const vector<Token_t>& game) {
+    double sum = 0;
+    for (int i = 1; i < (int)game.size(); i++)
+        sum += game[i].location.row;
+    return (sum / (game.size() - 1));
+}
+
 
 //WEIGHTED FACTORS:
 
@@ -366,7 +387,62 @@ Move_t bestByRegionAndDistance(const vector<Token_t>& game, double weightMobilit
     return pq.top().second;
 }
 
+Move_t bestOverallMove(
+        const vector<Token_t>& game,
+        double weightRegion,
+        double weightCluster,
+        double weightJump,
+        double weightLocalRisk,
+        double weightAdvance,
+        double weightThreatDist
+) {
+    using ScoreMove = pair<double,Move_t>;
+    auto cmp = [](const ScoreMove &a, const ScoreMove &b) {
+        return a.first > b.first;  // min-heap
+    };
+    priority_queue<ScoreMove, vector<ScoreMove>, decltype(cmp)> pq(cmp);
 
+    auto moves = generateAllSoldierMoves(game);
+    for (auto &m : moves) {
+        //simulate the move
+        auto sim = game;
+        int movedIdx = -1;
+        for (int k = 1; k < (int)sim.size(); ++k) {
+            if (sim[k].location == m.token.location) {
+                sim[k].location = m.destination;
+                movedIdx = k;
+                break;
+            }
+        }
+
+        //sub-scores
+        double R = (double)tigerReachableRegion(sim);
+        double C = (double)soldierClusters(sim);
+        double J = (double)countJumpable(sim);
+        double A = meanSoldierRow(sim);
+
+        //1.0 if this soldier is still jumpable else its 0
+        double localRisk = (movedIdx >= 0 && isJumpable(sim, movedIdx)) ? 1.0 : 0.0;
+
+        //neg so that a positive weight pushes them away
+        double minD = 1e9;
+        for (int i = 1; i < (int)sim.size(); ++i)
+            minD = min(minD, dist(sim[0].location, sim[i].location));
+
+        //final weighted score
+        double score =
+                weightRegion     * R          +
+                weightCluster    * C          +
+                weightJump       * J          +
+                weightLocalRisk  * localRisk  +
+                weightAdvance    * A          +
+                weightThreatDist * (-minD);
+
+        pq.emplace(score, m);
+    }
+
+    return pq.top().second;
+}
 
 //MOVE FUNCTIONS:
 
@@ -422,41 +498,44 @@ Move_t randomMove_soldiers(vector<Token_t> game) {
 }
 
 // Soldiers function
-Move_t  Move_NoahsNaiveNights_Men(vector<Token_t> game, Color_t turn) {
-
-    if (turn !=  BLUE)
+Move_t Move_NoahsNaiveNights_Men(vector<Token_t> game, Color_t turn) {
+    if (turn != BLUE)
         return randomMove_soldiers(game);
 
-    int tiger = 0;
     Phase p = getPhase(game);
-
+    //jump‐threat?
     double minDist = 1e9;
-    for (size_t i = 1; i < game.size(); i++)
+    for (int i = 1; i < (int)game.size(); ++i)
         minDist = min(minDist, dist(game[0].location, game[i].location));
     bool threat = (minDist < 2.0);
 
-    switch (p) {
-        // want to try to move pieces to center while sticking together
+    switch(p) {
         case START:
-            cout << "START" << endl;
-            return bestByRegionAndDistance(game, 0.1, 0.9);
+            return bestOverallMove(
+                    game,
+                    /*region*/    1.0,
+                    /*cluster*/   1.0,
+                    /*jump*/      2.0,
+                    /*localRisk*/ 5.0,   //avoid moves that leave the mover still jumpable
+                    /*advance*/   2.0,
+                    /*threatDist*/0.0
+            );
         case MID:
-            if (threat){
-                cout << "MID THREAT" << endl;
-                return bestByRegionAndDistance(game, 0.1, 0.9);
-            }
-            else{
-                cout << "MID" << endl;
-                return bestByRegionAndDistance(game, 0.1, .9);
-            }
+            return bestOverallMove(
+                    game,
+                    2.0, 1.0, 3.0, 5.0, 1.0,
+                    threat ? 2.0 : 0.0
+            );
         case CHECKMATE:
-            return bestMoveByTigerMobility(game);
-        case SURVIVE:
-            break;
+            return bestOverallMove(
+                    game,
+                    5.0, 0.5, 5.0, 5.0, 0.0, 0.0
+            );
+        default:
+            return randomMove_soldiers(game);
     }
-    return randomMove_soldiers(game);
-
 }
+
 
 
 
