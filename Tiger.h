@@ -25,10 +25,24 @@ Zones getCurZone(Point_t& location){
     //Hard codes each of the tigers zones and returns what zone the tiger is currently in
     //probably more efficent way of doing this but leaving it for now
      const set<Point_t,Point_t> redzone = {
-        {0,0}, {0,1},{1,0},{7,0}, {8,0}, {8,1}, {0,7}, {0,8}, {1,8}, {8,7}, {8,8}, {7,8}, {9,3}, {9,5}, {10,2}, {10,4}, {10,5}, {11,3}, {11,5}, {12,4}
+         //Top Tiger nest
+         {0,4},{1,3},{1,5},{2,2},{2,4},{2,6},{3,3},{3,5},
+         //top right corner
+         {4,0},{4,1},{5,0},
+         //top left corner
+         {4,7},{4,8},{5,8},
+         //bottom right corner
+         {11,0},{12,1},{12,0},
+         //bottom left corner
+         {12,7},{12,8},{11,8}
+
     };
     const set<Point_t,Point_t> greenzone = {
-        {2,2}, {2,3},{2,4},{2,5}, {2,6}, {3,2}, {3,3}, {3,4}, {3,5}, {3,6}, {4,2}, {4,3}, {4,4}, {4,5}, {4,6}, {5,2}, {5,3}, {5,4}, {5,5}, {5,6},{6,2}, {6,3},{6,4},{6,5}, {6,6}
+        {6,2}, {6,3},{6,4},{6,5}, {6,6},
+        {7,2}, {7,3}, {7,4}, {7,5}, {7,6},
+        {8,2}, {8,3}, {8,4}, {8,5}, {8,6},
+        {9,2}, {9,3}, {9,4}, {9,5}, {9,6},
+        {10,2}, {10,3},{10,4},{10,5}, {10,6}
     };
     
     if(redzone.find(location) != redzone.end()){
