@@ -21,10 +21,16 @@ using namespace std;
 // game phases for soldiers
 enum Zones {REDZONE, YELLOWZONE, GREENZONE};
 
+struct comparePoints{
+    bool operator()(const Point_t& a, const Point_t& b) const{
+        return a.row < b.row or (a.row == b.row and a.col < b.col);
+    }
+};
+
 Zones getCurZone(Point_t& location){
     //Hard codes each of the tigers zones and returns what zone the tiger is currently in
     //probably more efficent way of doing this but leaving it for now
-     const set<Point_t,Point_t> redzone = {
+     const set<Point_t,comparePoints> redzone = {
          //Top Tiger nest
          {0,4},{1,3},{1,5},{2,2},{2,4},{2,6},{3,3},{3,5},
          //top right corner
@@ -37,7 +43,7 @@ Zones getCurZone(Point_t& location){
          {12,7},{12,8},{11,8}
 
     };
-    const set<Point_t,Point_t> greenzone = {
+    const set<Point_t,comparePoints> greenzone = {
         {6,2}, {6,3},{6,4},{6,5}, {6,6},
         {7,2}, {7,3}, {7,4}, {7,5}, {7,6},
         {8,2}, {8,3}, {8,4}, {8,5}, {8,6},
