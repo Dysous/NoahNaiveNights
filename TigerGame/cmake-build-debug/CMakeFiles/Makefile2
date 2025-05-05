@@ -44,10 +44,10 @@ cmake_force:
 SHELL = cmd.exe
 
 # The CMake executable.
-CMAKE_COMMAND = "C:\Program Files\JetBrains\CLion 2023.3.2\bin\cmake\win\x64\bin\cmake.exe"
+CMAKE_COMMAND = "C:\Program Files\JetBrains\New folder\CLion 2023.3.2\bin\cmake\win\x64\bin\cmake.exe"
 
 # The command to remove a file.
-RM = "C:\Program Files\JetBrains\CLion 2023.3.2\bin\cmake\win\x64\bin\cmake.exe" -E rm -f
+RM = "C:\Program Files\JetBrains\New folder\CLion 2023.3.2\bin\cmake\win\x64\bin\cmake.exe" -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -80,12 +80,12 @@ clean: CMakeFiles/TigerGame.dir/clean
 CMakeFiles/TigerGame.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\TigerGame.dir\build.make CMakeFiles/TigerGame.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\TigerGame.dir\build.make CMakeFiles/TigerGame.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\NTMat\OneDrive\Documents\GitHub\NoahNaiveNights\TigerGame\cmake-build-debug\CMakeFiles --progress-num=1,2,3 "Built target TigerGame"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\NTMat\OneDrive\Documents\GitHub\NoahNaiveNights\TigerGame\cmake-build-debug\CMakeFiles --progress-num= "Built target TigerGame"
 .PHONY : CMakeFiles/TigerGame.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/TigerGame.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\NTMat\OneDrive\Documents\GitHub\NoahNaiveNights\TigerGame\cmake-build-debug\CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\NTMat\OneDrive\Documents\GitHub\NoahNaiveNights\TigerGame\cmake-build-debug\CMakeFiles 0
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/TigerGame.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\NTMat\OneDrive\Documents\GitHub\NoahNaiveNights\TigerGame\cmake-build-debug\CMakeFiles 0
 .PHONY : CMakeFiles/TigerGame.dir/rule

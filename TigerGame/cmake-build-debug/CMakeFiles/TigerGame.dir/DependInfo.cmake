@@ -8,8 +8,6 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "C:/Users/NTMat/OneDrive/Documents/GitHub/NoahNaiveNights/TigerGame/Soldiers.cpp" "CMakeFiles/TigerGame.dir/Soldiers.cpp.obj" "gcc" "CMakeFiles/TigerGame.dir/Soldiers.cpp.obj.d"
-  "C:/Users/NTMat/OneDrive/Documents/GitHub/NoahNaiveNights/TigerGame/Tiger.cpp" "CMakeFiles/TigerGame.dir/Tiger.cpp.obj" "gcc" "CMakeFiles/TigerGame.dir/Tiger.cpp.obj.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

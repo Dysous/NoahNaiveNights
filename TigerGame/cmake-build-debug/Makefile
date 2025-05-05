@@ -47,10 +47,10 @@ cmake_force:
 SHELL = cmd.exe
 
 # The CMake executable.
-CMAKE_COMMAND = "C:\Program Files\JetBrains\CLion 2023.3.2\bin\cmake\win\x64\bin\cmake.exe"
+CMAKE_COMMAND = "C:\Program Files\JetBrains\New folder\CLion 2023.3.2\bin\cmake\win\x64\bin\cmake.exe"
 
 # The command to remove a file.
-RM = "C:\Program Files\JetBrains\CLion 2023.3.2\bin\cmake\win\x64\bin\cmake.exe" -E rm -f
+RM = "C:\Program Files\JetBrains\New folder\CLion 2023.3.2\bin\cmake\win\x64\bin\cmake.exe" -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -67,7 +67,7 @@ CMAKE_BINARY_DIR = C:\Users\NTMat\OneDrive\Documents\GitHub\NoahNaiveNights\Tige
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "No interactive CMake dialog available..."
-	"C:\Program Files\JetBrains\CLion 2023.3.2\bin\cmake\win\x64\bin\cmake.exe" -E echo "No interactive CMake dialog available."
+	"C:\Program Files\JetBrains\New folder\CLion 2023.3.2\bin\cmake\win\x64\bin\cmake.exe" -E echo "No interactive CMake dialog available."
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -77,7 +77,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake to regenerate build system..."
-	"C:\Program Files\JetBrains\CLion 2023.3.2\bin\cmake\win\x64\bin\cmake.exe" --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	"C:\Program Files\JetBrains\New folder\CLion 2023.3.2\bin\cmake\win\x64\bin\cmake.exe" --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -128,54 +128,6 @@ TigerGame/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\TigerGame.dir\build.make CMakeFiles/TigerGame.dir/build
 .PHONY : TigerGame/fast
 
-Soldiers.obj: Soldiers.cpp.obj
-.PHONY : Soldiers.obj
-
-# target to build an object file
-Soldiers.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\TigerGame.dir\build.make CMakeFiles/TigerGame.dir/Soldiers.cpp.obj
-.PHONY : Soldiers.cpp.obj
-
-Soldiers.i: Soldiers.cpp.i
-.PHONY : Soldiers.i
-
-# target to preprocess a source file
-Soldiers.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\TigerGame.dir\build.make CMakeFiles/TigerGame.dir/Soldiers.cpp.i
-.PHONY : Soldiers.cpp.i
-
-Soldiers.s: Soldiers.cpp.s
-.PHONY : Soldiers.s
-
-# target to generate assembly for a file
-Soldiers.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\TigerGame.dir\build.make CMakeFiles/TigerGame.dir/Soldiers.cpp.s
-.PHONY : Soldiers.cpp.s
-
-Tiger.obj: Tiger.cpp.obj
-.PHONY : Tiger.obj
-
-# target to build an object file
-Tiger.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\TigerGame.dir\build.make CMakeFiles/TigerGame.dir/Tiger.cpp.obj
-.PHONY : Tiger.cpp.obj
-
-Tiger.i: Tiger.cpp.i
-.PHONY : Tiger.i
-
-# target to preprocess a source file
-Tiger.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\TigerGame.dir\build.make CMakeFiles/TigerGame.dir/Tiger.cpp.i
-.PHONY : Tiger.cpp.i
-
-Tiger.s: Tiger.cpp.s
-.PHONY : Tiger.s
-
-# target to generate assembly for a file
-Tiger.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\TigerGame.dir\build.make CMakeFiles/TigerGame.dir/Tiger.cpp.s
-.PHONY : Tiger.cpp.s
-
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -185,12 +137,6 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... TigerGame
-	@echo ... Soldiers.obj
-	@echo ... Soldiers.i
-	@echo ... Soldiers.s
-	@echo ... Tiger.obj
-	@echo ... Tiger.i
-	@echo ... Tiger.s
 .PHONY : help
 
 
