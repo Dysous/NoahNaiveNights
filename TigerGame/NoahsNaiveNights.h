@@ -1,7 +1,15 @@
+/**
+ * Authors: Noah Mathew, Nicholas Storti, Anjan Godavarti, Zach Taylor
+ * Assignment Title: Group Project - Tiger Game
+ * Assignment Description: Implementation of Move function
+ *     for group project Tiger Game
+ * Due Date: 05/04/2025
+ * Date Created: 04/13/2025
+ * Date Last Modified: 05/04/2025
+ */
 
 #ifndef NOAHSNAIVENIGHTS_H
 #define NOAHSNAIVENIGHTS_H
-
 
 #include <queue>
 #include <iostream>
@@ -16,15 +24,14 @@
 using namespace std;
 
 
-
-
-
 // Remember last soldier move to prevent undoing the last move
-static Move_t lastSoldierMove = Move_t{ Token_t{BLUE, Point_t{-1,-1}}, Point_t{-1,-1} };
+static Move_t lastSoldierMove = Move_t{ Token_t{BLUE, Point_t{-1,-1}},
+                                                      Point_t{-1,-1} };
 
 // game phases for soldiers
 enum Phase {START, MID, CHECKMATE, SURVIVE};
 
+// previous phase
 static Phase lastPhase;
 
 // diagonal edges
@@ -49,8 +56,13 @@ static vector<pair<Point_t,Point_t>> diags = {
 
 //HELPERS:
 
-//check if location is on grid
-//uses validLocationGrid from Booth's BearGame.h
+/**
+ * description: check if location on grid
+ * return: bool
+ * precondition: point is passed of player location
+ * postcondition: true if it is a valid location,
+ *     false otherwise
+ */
 bool validLocation(Point_t p){
     bool flag = true;
     int row = p.row;
@@ -64,7 +76,14 @@ bool validLocation(Point_t p){
     return 	 flag;
 }
 
-//check if move is legal
+/**
+ * description: check if move is legal
+ * return: bool
+ * precondition: current game state and potential move
+ *     are passed
+ * postcondition: given current game state, returns true
+ *     if the proposed move is legal, false otherwise
+ */
 bool legalMove(vector<Token_t> game, Move_t move) {
 
     // check if on grid
@@ -85,15 +104,17 @@ bool legalMove(vector<Token_t> game, Move_t move) {
         // check either orientation in your diag list
         auto forward  = make_pair(source, dest);
         auto backward = make_pair(dest, source);
-        ok = (find(diags.begin(), diags.end(), forward ) != diags.end()) || (find(diags.begin(), diags.end(), backward) != diags.end());
+        ok = (find(diags.begin(), diags.end(), forward ) != diags.end())
+          || (find(diags.begin(), diags.end(), backward) != diags.end());
     }
     if (!ok) return false;
 
     // check if in lion's den
     //do we want to keep this? this just disallows moving to top diamond?
     /*
-    if (move.destination.row < 4 && (move.token.location.row == move.destination.row ||
-                                     move.token.location.col == move.destination.col)) {
+    if (move.destination.row < 4 &&
+       (move.token.location.row == move.destination.row ||
+        move.token.location.col == move.destination.col)) {
         return false;
     }
     */
@@ -107,10 +128,16 @@ bool legalMove(vector<Token_t> game, Move_t move) {
     return true;
 }
 
-
-// geometric distance between two points
+/**
+ * description: geometric distance between two points
+ * return: double
+ * precondition: two points passed as arguments
+ * postcondition: geometric distance between the points
+ *     returned
+ */
 double dist(Point_t p1, Point_t p2) {
-    return sqrt((p1.row - p2.row) * (p1.row - p2.row) + (p1.col - p2.col) * (p1.col - p2.col));
+    return sqrt((p1.row - p2.row) * (p1.row - p2.row) + (
+                 p1.col - p2.col) * (p1.col - p2.col));
 }
 
 
@@ -119,15 +146,28 @@ double dist(Point_t p1, Point_t p2) {
 // game phases for soldiers
 enum Zones {REDZONE, YELLOWZONE, GREENZONE};
 
+// comparison class for point objects
 struct comparePoints{
+    /**
+     * description: comparison function for points
+     * return: bool
+     * precondition: two points passed by reference
+     * postcondition: true if point a less than b, false otherwise
+     */
     bool operator()(const Point_t& a, const Point_t& b) const{
         return a.row < b.row or (a.row == b.row and a.col < b.col);
     }
 };
 
+/**
+ * description: Hard codes each of the tigers zones and returns
+ *     what zone the tiger is currently in
+ * return: enumerated zone type
+ * precondition: location of player passed by reference as a point
+ * postcondition: zone of the location returned
+ */
 Zones getCurZone(Point_t& location){
     cout << "Getting zone" << endl;
-    //Hard codes each of the tigers zones and returns what zone the tiger is currently in
     //probably more efficent way of doing this but leaving it for now
     const set<Point_t,comparePoints> redzone = {
             //Top Tiger nest
@@ -161,6 +201,13 @@ Zones getCurZone(Point_t& location){
     }
 }
 
+/**
+ * description: finds possible moves for tiger
+ * return: vector of points
+ * precondition: current game state passed as an argument
+ * postcondition: vector of points representing possible tiger moves
+ *     returned
+ */
 vector<Point_t> getMoves(vector<Token_t> players) {
     //Get tiger's current location
     Point_t tigerLoc = players[0].location;
@@ -191,6 +238,12 @@ vector<Point_t> getMoves(vector<Token_t> players) {
     return possMoves;
 }
 
+/**
+ * description: possible next move for tiger
+ * return: move object
+ * precondtion: game state and possible moves passed as arguments
+ * postcondition: returns optimal move for tiger
+ */
 Move_t nextMove(vector<Token_t> players, vector<Point_t> possMoves) {
     double distFromCenter = INFINITY;
 
@@ -219,6 +272,12 @@ Move_t nextMove(vector<Token_t> players, vector<Point_t> possMoves) {
     return nextMove;
 }
 
+/**
+ * description: finds positions of soldiers
+ * return: vector of points
+ * precondition: current game state and possible moves passed
+ * postcondition: returns points where soldiers are located
+ */
 vector<Point_t> findSoldiers(vector<Token_t> players, vector<Point_t> possMoves) {
     vector<Point_t> soldierLocs;
 
@@ -234,13 +293,20 @@ vector<Point_t> findSoldiers(vector<Token_t> players, vector<Point_t> possMoves)
     return soldierLocs;
 }
 
-//If there are no soldiers that can be eaten, return value will have null point
+/**
+ * description: move for jumping a soldier
+ * return: move
+ * precondition: game state and soldier locations passed
+ * postcondition: tries to eat a soldier. If there are no soldiers
+ *     that can be eaten, return value will have null point
+ */
 Move_t eatSoldier(vector<Token_t> players, vector<Point_t> soldierLocs) {
     Move_t dest;
     dest.token = players[0];
     dest.destination.row = -1;
 
-    double distFromCenter = INFINITY;   //If multiple soldiers can be jumped one closest to center will be jumped
+    double distFromCenter = INFINITY;
+    //If multiple soldiers can be jumped one closest to center will be jumped
 
     Point_t center;
     center.row = 8;
@@ -262,7 +328,8 @@ Move_t eatSoldier(vector<Token_t> players, vector<Point_t> soldierLocs) {
         jumpMove.destination = jumpPoint;
 
         //Check if move is legal/there are no soldiers at jump point
-        if (legalMove(players, jumpMove) && dist(center, jumpMove.destination) < distFromCenter) {
+        if (legalMove(players, jumpMove) &&
+            dist(center, jumpMove.destination) < distFromCenter) {
             distFromCenter = dist(center, jumpMove.destination);
             dest.destination = jumpMove.destination;
         }
@@ -271,6 +338,12 @@ Move_t eatSoldier(vector<Token_t> players, vector<Point_t> soldierLocs) {
     return dest;
 }
 
+/**
+ * description: tiger move function
+ * return: move
+ * precondition: game state and turn passed
+ * postcondition: returns move for the tiger
+ */
 Move_t tigerStrategy(vector<Token_t> players, Color_t turn) {
     cout << "Custom tiger strategy" << endl;
 
@@ -298,36 +371,49 @@ Move_t tigerStrategy(vector<Token_t> players, Color_t turn) {
     return move;
 }
 
-// returns point where tiger could jump to over given man
-// point holds (-1,-1) if no point exists
+/**
+ * description: returns point where tiger could jump to over given man
+ * return: point
+ * precondition: game state and soldier index
+ * postcondition: point where tiger could jump over given soldier.
+ *     Returns (-1, -1) if no point exists
+ */
 Point_t checkJump(vector<Token_t> game, int man) {
     Point_t jmp(-1,-1);
 
     // first check if tiger is in range
     if (dist(game[0].location, game[man].location) < 2) {
         // check points surrounding man
-        if (legalMove(game, Move_t(game[0], Point_t(game[man].location.row, game[man].location.col + 1)))) {
+        if (legalMove(game, Move_t(game[0],
+            Point_t(game[man].location.row, game[man].location.col + 1)))) {
             jmp = Point_t(game[man].location.row, game[man].location.col + 1);
         }
-        else if (legalMove(game, Move_t(game[0], Point_t(game[man].location.row, game[man].location.col - 1)))) {
+        else if (legalMove(game, Move_t(game[0],
+            Point_t(game[man].location.row, game[man].location.col - 1)))) {
             jmp = Point_t(game[man].location.row, game[man].location.col - 1);
         }
-        else if (legalMove(game, Move_t(game[0], Point_t(game[man].location.row + 1, game[man].location.col)))) {
+        else if (legalMove(game, Move_t(game[0],
+            Point_t(game[man].location.row + 1, game[man].location.col)))) {
             jmp = Point_t(game[man].location.row + 1, game[man].location.col);
         }
-        else if (legalMove(game, Move_t(game[0], Point_t(game[man].location.row - 1, game[man].location.col)))) {
+        else if (legalMove(game, Move_t(game[0],
+            Point_t(game[man].location.row - 1, game[man].location.col)))) {
             jmp = Point_t(game[man].location.row - 1, game[man].location.col);
         }
-        else if (legalMove(game, Move_t(game[0], Point_t(game[man].location.row + 1, game[man].location.col + 1)))) {
+        else if (legalMove(game, Move_t(game[0],
+            Point_t(game[man].location.row + 1, game[man].location.col + 1)))) {
             jmp = Point_t(game[man].location.row + 1, game[man].location.col + 1);
         }
-        else if (legalMove(game, Move_t(game[0], Point_t(game[man].location.row + 1, game[man].location.col - 1)))) {
+        else if (legalMove(game, Move_t(game[0],
+            Point_t(game[man].location.row + 1, game[man].location.col - 1)))) {
             jmp = Point_t(game[man].location.row + 1, game[man].location.col - 1);
         }
-        else if (legalMove(game, Move_t(game[0], Point_t(game[man].location.row - 1, game[man].location.col + 1)))) {
+        else if (legalMove(game, Move_t(game[0],
+            Point_t(game[man].location.row - 1, game[man].location.col + 1)))) {
             jmp = Point_t(game[man].location.row - 1, game[man].location.col + 1);
         }
-        else if (legalMove(game, Move_t(game[0], Point_t(game[man].location.row - 1, game[man].location.col - 1)))) {
+        else if (legalMove(game, Move_t(game[0],
+            Point_t(game[man].location.row - 1, game[man].location.col - 1)))) {
             jmp = Point_t(game[man].location.row - 1, game[man].location.col - 1);
         }
     }
@@ -335,6 +421,13 @@ Point_t checkJump(vector<Token_t> game, int man) {
     return jmp;
 }
 
+/**
+ * description: generates all possible soldier moves
+ * return: vector of moves
+ * precondition: current game state passed as argument
+ * postcondition: vector of moves representing soldier moves
+ *     returned
+ */
 vector<Move_t> generateAllSoldierMoves(const vector<Token_t>& game) {
     vector<Move_t> moves;
     for (size_t i = 1; i < game.size(); i++) {
@@ -354,6 +447,13 @@ vector<Move_t> generateAllSoldierMoves(const vector<Token_t>& game) {
     return moves;
 }
 
+/**
+ * description: find neighboring soldiers to given soldier
+ * return: vector of integers
+ * precondition: game state and index of given soldier passed
+ * postcondition: returns indices of soldiers neighboring given
+ *     soldier
+ */
 vector<int> getSoldierNeighbors(const vector<Token_t>& game, int n) {
     vector<int> adj;
     Point_t a = game[n].location;
@@ -375,6 +475,12 @@ vector<int> getSoldierNeighbors(const vector<Token_t>& game, int n) {
     return adj;
 }
 
+/**
+ * description: measure of soldier distance from each other
+ * return: integer
+ * precondition: game state passed
+ * postcondition: soldier distance magnitude returned
+ */
 int absSoldierDist(const vector<Token_t>& game) {
     int best = 0;
     for (size_t i = 1; i < game.size(); i++) {
@@ -387,11 +493,13 @@ int absSoldierDist(const vector<Token_t>& game) {
     return best;
 }
 
-
-
-
-
-//average row of all soldiers (lower is further up the board && better)
+/**
+ * description: average row of all soldiers. Lower is further
+ *     up the board and considered better.
+ * return: double
+ * precondition: current game state passed
+ * postcondition: average row of soldiers returned
+ */
 double meanSoldierRow(const vector<Token_t>& game) {
     double sum = 0;
     for (int i = 1; i < (int)game.size(); i++)
@@ -399,6 +507,13 @@ double meanSoldierRow(const vector<Token_t>& game) {
     return (sum / (game.size() - 1));
 }
 
+/**
+ * description: shortest path to reach a point from given start point
+ * return: integer
+ * precondition: current game state, start point, and end point passed
+ * postcondition: integer distance of shortest path from start to end
+ *     returned
+ */
 int shortestPath(const vector<Token_t>& game, Point_t start, Point_t goal) {
     int rows = GRID_ROW, cols = GRID_COL;
     vector<vector<bool>> visited(rows, vector<bool>(cols, false));
@@ -477,6 +592,12 @@ int shortestPath(const vector<Token_t>& game, Point_t start, Point_t goal) {
     return INT_MAX;//unreachable
 }
 
+/**
+ * description: checks if point is adjacent
+ * return: bool
+ * precondition: two points to check adjacency passed
+ * postcondition: true if adjacent, false otherwise
+ */
 bool isAdjacent(Point_t a, Point_t b) {
     int dr = b.row - a.row;
     int dc = b.col - a.col;
@@ -494,6 +615,12 @@ bool isAdjacent(Point_t a, Point_t b) {
     return false;
 }
 
+/**
+ * description: check if given soldier is jumpable
+ * return: bool
+ * precondition: current game state and index of given soldier passed
+ * postcondition: true if soldier is jumpable, false otherwise
+ */
 bool checkJumpable(const vector<Token_t>& game, int n) {
     Point_t s = game[n].location;
 
@@ -530,6 +657,12 @@ bool checkJumpable(const vector<Token_t>& game, int n) {
     return false;
 }
 
+/**
+ * description: number of jumpable soldiers
+ * return: integer
+ * precondition: current game state
+ * postcondition: number of jumpable soldiers
+ */
 int countJumpable(const vector<Token_t>& g) {
     int count = 0;
     for (int i = 1; i < (int)g.size(); i++)
@@ -538,10 +671,22 @@ int countJumpable(const vector<Token_t>& g) {
     return count;
 }
 
+/**
+ * description: wrapper function to check jumpability
+ * return: bool
+ * precondition: game state and soldier index
+ * postcondition: true if soldier is jumpable, false otherwise
+ */
 bool isJumpable(const vector<Token_t>& game, int n) {
     return checkJumpable(game, n);
 }
 
+/**
+ * description: check if soldier can be saved
+ * return: bool
+ * precondition: game state and soldier index
+ * postcondition: true if he can be saved, false otherwise
+ */
 bool isSaveable(const vector<Token_t>& game, int n) {
     // if not jumpable its safe
     if (!checkJumpable(game, n))
@@ -589,8 +734,14 @@ bool isSaveable(const vector<Token_t>& game, int n) {
     return true;
 }
 
-
-int countUnsavableJumpable(const vector<Token_t>& game) {//counts # of unsaveable soldiers after a move
+/**
+ * description: counts number of unsaveable soldiers after
+ *     a move
+ * return: integer
+ * precondition: game state
+ * postcondition: number of unsaveable soldiers returned
+ */
+int countUnsavableJumpable(const vector<Token_t>& game) {
     int count = 0;
     for (int i = 1; i < (int)game.size(); ++i) {
         // use the boolean checkJumpable now
@@ -603,7 +754,13 @@ int countUnsavableJumpable(const vector<Token_t>& game) {//counts # of unsaveabl
 
 //WEIGHTED FACTORS:
 
-
+/**
+ * description: gives weighting representing how soldiers
+ *     are clustered
+ * return: integer
+ * precondition: game state passed
+ * postcondition: number representing soldier clustering returned
+ */
 int soldierClusters(const vector<Token_t>& game) {
     int clusters = 0;
     int n = game.size();
@@ -631,6 +788,12 @@ int soldierClusters(const vector<Token_t>& game) {
     return clusters;
 }
 
+/**
+ * description: checks if soldier currently jumpable
+ * return: bool
+ * precondition: game state and soldier index passed
+ * postcondition: true if soldier can be jumped, false otherwise
+ */
 bool immediateJumpable(const vector<Token_t>& game, int n) {
     Point_t p    = game[n].location;
     Point_t tpos = game[0].location;
@@ -666,9 +829,15 @@ bool immediateJumpable(const vector<Token_t>& game, int n) {
 
     return true;
 }
+
 //PRIORITY Qs
-
-
+/**
+ * description: checks where tiger can reach
+ * return: integer
+ * precondition: game state
+ * postcondition: returns integer representing tiger reachable
+ *     region
+ */
 int tigerReachableRegion(const vector<Token_t>& game) {
     //bfs over the adj grid
     //occupied squares should block
@@ -709,9 +878,12 @@ int tigerReachableRegion(const vector<Token_t>& game) {
 
 //MOVE FUNCTIONS:
 
-// function to determine phase of game
-// can refine definition later
-// just doing start and middle for now
+/**
+ * description: determine game phase
+ * return: enumerated phase type
+ * precondition: given game state and current phase
+ * postcondition: returns game phase determined from game state
+ */
 Phase getPhase(vector<Token_t> game, Phase current) {
     int soldiers = game.size() - 1;
     if (soldiers <= 1) return SURVIVE;
@@ -721,7 +893,12 @@ Phase getPhase(vector<Token_t> game, Phase current) {
     return CHECKMATE;
 }
 
-
+/**
+ * description: generate random move for soldiers
+ * return: move
+ * precondition: game state passed
+ * postcondition: returns random move for a solider
+ */
 Move_t randomMove_soldiers(vector<Token_t> game) {
     srand(time(0));
     int man = (rand() % (game.size() - 1)) + 1;
@@ -749,7 +926,12 @@ Move_t randomMove_soldiers(vector<Token_t> game) {
 }
 
 
-
+/**
+ * description: minimum soldier distance from tiger
+ * return: double
+ * precondition: game phase and potential move passed
+ * postcondition: returns minimum distance from a soldier to tiger
+ */
 static double minSoldierDistFromTiger(const vector<Token_t>& base, const Move_t &m) {
     auto sim = base;
     for (int i = 1; i < (int)sim.size(); ++i) {
@@ -765,7 +947,12 @@ static double minSoldierDistFromTiger(const vector<Token_t>& base, const Move_t 
 }
 
 
-
+/**
+ * description: generate move for starting phase
+ * return: move
+ * precondition: game state passed
+ * postcondition: returns move for starting phase of the game
+ */
 Move_t startPhaseMove(const vector<Token_t>& game) {
     const int MAX_JUMPABLE_BEFORE = 3;
     const int MAX_ROW_DIFF       = 1;
@@ -851,7 +1038,13 @@ Move_t startPhaseMove(const vector<Token_t>& game) {
     return Move_t{ Token_t{BLUE, Point_t{-1,-1}}, Point_t{-1,-1} };
 }
 
-
+/**
+ * description: move for survival phase of the game
+ * return: move
+ * precondition: game state passed
+ * postcondition: gives move if in the survival phase
+ *     of the game
+ */
 Move_t survivePhaseMove(const vector<Token_t>& game) {
     int n = game.size() - 1;
     // If only one soldier, stick to walls
@@ -894,7 +1087,12 @@ Move_t survivePhaseMove(const vector<Token_t>& game) {
     return bestMove;
 }
 
-
+/**
+ * description: move for the soldiers
+ * return: move
+ * precondition: game phase and turn passed
+ * postcondition: returns move for soldiers
+ */
 Move_t Move_NoahsNaiveNights_Men(vector<Token_t> game, Color_t turn) {
     if (turn != BLUE)
         return randomMove_soldiers(game);
@@ -928,7 +1126,12 @@ Move_t Move_NoahsNaiveNights_Men(vector<Token_t> game, Color_t turn) {
 }
 
 
-
+/**
+ * description: move function for tiger game
+ * return: move
+ * precondition: game phase and turn given
+ * postcondition: gives move for soldiers or men depending on turn
+ */
 Move_t Move_NoahsNaiveNights(vector<Token_t> game, Color_t turn){
     if(turn == BLUE){
         return Move_NoahsNaiveNights_Men(game,turn);
@@ -937,9 +1140,6 @@ Move_t Move_NoahsNaiveNights(vector<Token_t> game, Color_t turn){
         return tigerStrategy(game,turn);
     }
 }
-
-
-
 
 
 #endif //NOAHSNAIVENIGHTS_H
